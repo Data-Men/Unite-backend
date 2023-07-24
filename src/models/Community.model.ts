@@ -3,7 +3,7 @@ import query from "../services/db";
 interface ICommunity {
     create(obj: Partial<TCommunityData>): Promise<any>
     updateByID(id: string, updateData: Partial<TCommunityData>): Promise<boolean>
-    delete(id: string): Promise<boolean>
+    deleteById(id: string): Promise<boolean>
 }
 
 type TCommunityData = {
@@ -39,7 +39,7 @@ class Community implements ICommunity {
         try {
             const { name, description, privacy_status, banner_image, profile_pic } = updateData
 
-            const result = await query(`UPDATE communities SET (name=$1,description=$2,privacy_status=$3,banner_image=$4,profile_pic=$5 WHERE id=$6 RETURNING id,name,description)`, [name, description, privacy_status, banner_image, profile_pic, id])
+            const result = await query(`UPDATE communities SET name=$1,description=$2,privacy_status=$3,banner_img=$4,profile_pic=$5 WHERE id=$6 RETURNING id,name,description,profile_pic,banner_img,privacy_status,created_by,created_at`, [name, description, privacy_status, banner_image, profile_pic, id])
             console.log(result);
             return result
         } catch (error) {
@@ -48,13 +48,15 @@ class Community implements ICommunity {
         }
     }
 
-    async delete(id: string): Promise<boolean> {
+    async deleteById(id: string): Promise<boolean> {
         try {
-
+            const result = await query(`WITH deleted AS (DELETE FROM communities WHERE id=$1 RETURNING *) SELECT count(*) FROM deleted;`, [id]);
+            console.log(`Delete Result:${JSON.stringify(result)}`);
+            return true
         } catch (error) {
-
+            console.trace(error);
+            return false
         }
-        return false
     }
 
 }

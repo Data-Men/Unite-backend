@@ -1,6 +1,6 @@
 import express, { Express, Request, Response, NextFunction } from 'express';
 
-import { create,update } from "./../controllers/community.controller";
+import { create, updateByID, deleteById } from "./../controllers/community.controller";
 const router = express.Router();
 
 router.post('/', async (req: Request, res: Response) => {
@@ -9,9 +9,17 @@ router.post('/', async (req: Request, res: Response) => {
 
 router.put('/:id', async (req: Request, res: Response) => {
     try {
-        res.status(200).json({})
+        await updateByID(req, res);
     } catch (error) {
-        res.status(501).json("")
+        console.log(error);
+    }
+})
+
+router.delete('/:id', async (req: Request, res: Response) => {
+    try {
+        await deleteById(req, res);
+    } catch (error) {
+        console.log(error);
     }
 })
 
