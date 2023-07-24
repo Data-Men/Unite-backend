@@ -1,15 +1,19 @@
 import express, { Express, Request, Response, NextFunction } from 'express';
 
-import createCommunity from "./../controllers/community.controller";
+import { create,update } from "./../controllers/community.controller";
 const router = express.Router();
 
 router.post('/', async (req: Request, res: Response) => {
-    try {
+    await create(req, res);
+})
 
-        res.status(200).json(await createCommunity());
+router.put('/:id', async (req: Request, res: Response) => {
+    try {
+        res.status(200).json({})
     } catch (error) {
-        res.status(404).json("error occourd")
+        res.status(501).json("")
     }
 })
+
 
 export default router
