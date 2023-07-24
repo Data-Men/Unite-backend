@@ -4,10 +4,10 @@ dotenv.config();
 
 //loading http server and socket.io server
 import express from 'express';
-import path from 'path';
+// import path from 'path';
 import { createServer } from 'http';
 import { Server, Socket } from 'socket.io';
-import  bodyParser from 'body-parser';
+import bodyParser from 'body-parser';
 //Creating and Connecting express server with httpServer
 const app = express();
 const httpServer = createServer(app);
@@ -18,11 +18,11 @@ const io = new Server(httpServer);
 //loading routes
 import indexRouter from './routers/IndexRouter';
 import userRouter from './routers/userRouter';
-
+import communityRouter from "./routers/communityRouter";
 //parsing request
-app.use(bodyParser.json()); 
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
-    extended:true,
+    extended: true,
 }));
 
 //Static file Sending
@@ -36,7 +36,7 @@ import chat from './controllers/chatStart';
 //Routing
 app.use('/', indexRouter);
 app.use('/users', userRouter);
-
+app.use('/community', communityRouter);
 
 //Event Listening
 const onConnection = (Socket: Socket) => {
