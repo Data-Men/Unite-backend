@@ -22,9 +22,13 @@ CREATE TABLE community_tags (
 CREATE TABLE community_members (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     community_id UUID REFERENCES communities(id) NOT NULL,
+    is_member BOOLEAN NOT NUll DEFAULT 't',
     user_id VARCHAR(100) NOT NULL,
+    username VARCHAR(100) NOT NULL,
     member_name VARCHAR(200) NOt NULL,
     member_pic TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ
 );
 CREATE TABLE community_posts(
     id UUID DEFAULT uuid_generate_v4(),
@@ -34,3 +38,4 @@ CREATE TABLE community_posts(
     community_id UUID REFERENCES communities(id) NOT NULL,
     created_at TIMESTAMPTZ
 );
+
