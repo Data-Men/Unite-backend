@@ -4,6 +4,7 @@ interface ICommunity {
     create(obj: Partial<TCommunityData>): Promise<any>
     updateByID(id: string, updateData: Partial<TCommunityData>): Promise<boolean>
     deleteById(id: string): Promise<boolean>
+    getByName(name: string): Promise<TCommunityData[]>
 }
 
 type TCommunityData = {
@@ -13,7 +14,7 @@ type TCommunityData = {
     banner_image?: string;
     privacy_status: string;
     created_by: string;
-    // created_at?: string;
+    created_at?: string;
 }
 
 class Community implements ICommunity {
@@ -51,7 +52,7 @@ class Community implements ICommunity {
     async deleteById(id: string): Promise<boolean> {
         try {
             const result = await query(`WITH deleted AS (DELETE FROM communities WHERE id=$1 RETURNING *) SELECT count(*) FROM deleted;`, [id]);
-            console.log(`Delete Result:${JSON.stringify(result)}`);
+            // console.log(`Delete Result:${JSON.stringify(result)}`);
             return true
         } catch (error) {
             console.trace(error);
@@ -59,6 +60,14 @@ class Community implements ICommunity {
         }
     }
 
+    async getByName(name: string): Promise<TCommunityData[] | any[]> {
+        try {
+            const result = await query(`SELECT * FROM communities WHERE name `) as TCommunityData[] | any[]
+            return result
+        } catch (error) {
+            return []
+        }
+    }
 }
 
 
