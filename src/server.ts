@@ -16,8 +16,6 @@ const httpServer = createServer(app);
 const io = new Server(httpServer);
 
 //loading routes
-import indexRouter from './routers/IndexRouter';
-import userRouter from './routers/userRouter';
 import communityRouter from "./routers/communityRouter";
 //parsing request
 app.use(bodyParser.json());
@@ -34,8 +32,6 @@ app.use(bodyParser.urlencoded({
 import chat from './controllers/chatStart';
 
 //Routing
-app.use('/', indexRouter);
-app.use('/users', userRouter);
 app.use('/community', communityRouter);
 
 //Event Listening

@@ -2,10 +2,15 @@ import { error } from "console";
 import Community from "./../models/Community.model";
 import { Request, Response } from 'express';
 
+interface ResponseObj {
+    data: {},
+    message: string,
+    error: [{}]
+}
 const community = new Community();
 
 export const create = async (req: Request, res: Response) => {
-
+    let responseObj: ResponseObj;
     try {
         const { name, description, created_by, privacy_status } = req.body
         const result = await community.create({
