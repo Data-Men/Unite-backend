@@ -2,7 +2,8 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE TABLE tags (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(50) UNIQUE NOT NULL category VARCHAR(50) UNIQUE NOT NULL
+    name VARCHAR(50) UNIQUE NOT NULL,
+    category VARCHAR(50) NOT NULL
 );
 CREATE TABLE communities (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -38,4 +39,3 @@ CREATE TABLE community_posts(
     community_id UUID REFERENCES communities(id) NOT NULL,
     created_at TIMESTAMPTZ
 );
-

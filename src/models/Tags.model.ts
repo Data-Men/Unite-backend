@@ -23,6 +23,8 @@ class Tag implements ITags {
             return result
         } catch (error) {
             console.log("Error While Creating Tag");
+            console.log(error);
+            
             return []
         }
     }
@@ -48,8 +50,7 @@ class Tag implements ITags {
 
     async searchTag(tagName: String): Promise<TTag[]> {
         try {
-
-            const result = await query("SELECT id,name,category FROM tags where name like '%$1'", [tagName])
+            const result = await query("SELECT id,name,category FROM tags where name like $1", [`${tagName}%`])
             return result
         } catch (error) {
             return []
@@ -61,8 +62,10 @@ class Tag implements ITags {
             const result = await query("SELECT id,name,category FROM tags where name=$1", [id])
             return result
         } catch (error) {
-
+            console.log
             return []
         }
     }
 }
+
+export default Tag

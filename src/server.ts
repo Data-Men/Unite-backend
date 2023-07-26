@@ -17,6 +17,8 @@ const io = new Server(httpServer);
 
 //loading routes
 import communityRouter from "./routers/communityRouter";
+import communityMemberRouter from "./routers/communityMemeberRouter"
+import tagRouter from "./routers/tagsRouter"
 //parsing request
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -33,6 +35,8 @@ import chat from './controllers/chatStart';
 
 //Routing
 app.use('/community', communityRouter);
+app.use('/community/members',communityMemberRouter);
+app.use('/tag',tagRouter);
 
 //Event Listening
 const onConnection = (Socket: Socket) => {
