@@ -1,4 +1,3 @@
-import { error } from "console";
 import Community from "./../models/Community.model";
 import { Request, Response } from 'express';
 
@@ -7,6 +6,8 @@ interface ResponseObj {
     message: string,
     error: [{}]
 }
+
+//Creating object
 const community = new Community();
 
 export const create = async (req: Request, res: Response) => {

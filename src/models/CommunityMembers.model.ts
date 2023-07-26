@@ -57,3 +57,5 @@ class CommunityMember implements ICommunityMember {
     }
 
 }
+
+export default CommunityMember;
