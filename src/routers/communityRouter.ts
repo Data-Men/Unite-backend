@@ -4,7 +4,11 @@ import { create, updateByID, deleteById } from "./../controllers/community.contr
 const router = express.Router();
 
 router.post('/', async (req: Request, res: Response) => {
+  try {
     await create(req, res);
+  } catch (error) {
+    console.log(error);
+  }
 })
 
 router.put('/:id', async (req: Request, res: Response) => {

@@ -39,15 +39,15 @@ app.use('/community/members',communityMemberRouter);
 app.use('/tag',tagRouter);
 
 //Event Listening
-const onConnection = (Socket: Socket) => {
-    console.log("Connect to the websocket");
-    chat(io, Socket);
-    Socket.on('disconnect', (reason) => {
-        console.log(reason)
-    });
-}
+// const onConnection = (Socket: Socket) => {
+//     console.log("Connect to the websocket");
+//     chat(io, Socket);
+//     Socket.on('disconnect', (reason) => {
+//         console.log(reason)
+//     });
+// }
 
-io.on("connection", onConnection);
+// io.on("connection", onConnection);
 
 httpServer.listen(process.env.PORT, () => {
     console.log(`App is listning at port: ${process.env.PORT}`);
