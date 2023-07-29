@@ -49,25 +49,32 @@ class Community {
                 const memberInsert = `INSERT INTO community_members (community_id,user_id,username,member_name,member_pic,member_role) VALUES ($1,$2,$3,$4,$5,$6) RETURNING id,community_id AS communityId,is_member AS isMember,user_id AS userID,username,member_name AS memberName,member_pic AS memberPic,member_role AS memberRole;`;
                 const mData = [communityData.rows[0].id, user_id, username, member_name, member_pic, "Admin"];
                 const communityMemberData = yield client.query(memberInsert, mData);
-                const tagData = tagIds.map((id) => __awaiter(this, void 0, void 0, function* () {
-                    try {
-                        const result = yield client.query("INSERT INTO community_tags(community_id,tag_id)  VALUES($1,$2) RETURNING id,community_id AS communityId", [communityData.rows[0].id, id]);
-                        return result.rows[0];
-                    }
-                    catch (error) {
-                    }
-                }));
+                // const tagData = tagIds.map(async (id) => {
+                //     try {
+                //         const result = await client.query("INSERT INTO community_tags(community_id,tag_id)  VALUES($1,$2) RETURNING id,community_id AS communityId", [communityData.rows[0].id, id]);
+                //         console.log(result);
+                //         return result.rows[0];
+                //     } catch (error) {
+                //     }
+                // })
+                let str = "INSERT INTO community_tags (community_id,tag_id)  VALUES  ";
+                tagIds.forEach((id) => {
+                    if (typeof id === "number")
+                        str = str + `('${communityData.rows[0].id}',${id}),`;
+                });
+                str = str.substring(0, str.length - 1) + "RETURNING id,community_id AS communityId,tag_id as tagId";
+                const tagData = yield client.query(str);
                 yield client.query('COMMIT');
                 return {
                     communityData: communityData.rows[0],
                     communityMemberData: communityMemberData.rows[0],
-                    tags: tagData
+                    tags: tagData.rows
                 };
             }
             catch (error) {
                 console.error(error);
                 yield client.query('ROLLBACK');
-                return {};
+                throw error;
             }
             finally {
                 yield client.release();

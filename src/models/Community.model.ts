@@ -1,8 +1,9 @@
 import { json } from "stream/consumers";
 import query, { pools } from "../services/db";
+import { type } from "os";
 
 interface ICommunity {
-    create(comunityData: Partial<TCommunityData>, memberData: TMember, tags: Array<Int16Array>): Promise<any>
+    create(comunityData: Partial<TCommunityData>, memberData: TMember, tags: Int16Array): Promise<any>
     updateByID(id: string, updateData: Partial<TCommunityData>): Promise<boolean>
     deleteById(id: string): Promise<boolean>
     getByName(name: string): Promise<TCommunityData[]>
@@ -30,7 +31,7 @@ type TMember = {
 
 class Community implements ICommunity {
 
-    async create(comunityData: TCommunityData, memberData: TMember, tagIds: Array<Int16Array>): Promise<any> {
+    async create(comunityData: TCommunityData, memberData: TMember, tagIds: Int16Array): Promise<any> {
         const pool = await pools();
         const client = await pool.connect();
         try {
@@ -49,27 +50,40 @@ class Community implements ICommunity {
             const communityMemberData = await client.query(memberInsert, mData);
 
 
-            const tagData = tagIds.map(async (id) => {
-                try {
-                    const result = await client.query("INSERT INTO community_tags(community_id,tag_id)  VALUES($1,$2) RETURNING id,community_id AS communityId", [communityData.rows[0].id, id]);
-                    return result.rows[0];
-                } catch (error) {
+            // const tagData = tagIds.map(async (id) => {
+            //     try {
+            //         const result = await client.query("INSERT INTO community_tags(community_id,tag_id)  VALUES($1,$2) RETURNING id,community_id AS communityId", [communityData.rows[0].id, id]);
+            //         console.log(result);
 
-                }
+            //         return result.rows[0];
+            //     } catch (error) {
 
-            })
+            //     }
+
+            // })
+
+            let str = "INSERT INTO community_tags (community_id,tag_id)  VALUES  "
+
+            tagIds.forEach((id) => {
+                if (typeof id === "number")
+                    str = str + `('${communityData.rows[0].id}',${id}),`
+            });
+
+            str = str.substring(0, str.length - 1)+"RETURNING id,community_id AS communityId,tag_id as tagId";
+
+            const tagData = await client.query(str);
 
             await client.query('COMMIT');
             return {
                 communityData: communityData.rows[0],
                 communityMemberData: communityMemberData.rows[0],
-                tags: tagData
+                tags: tagData.rows
             };
         } catch (error) {
             console.error(error);
 
             await client.query('ROLLBACK');
-            return {}
+            throw error
         } finally {
             await client.release();
         }
