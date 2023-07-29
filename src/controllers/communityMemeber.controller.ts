@@ -1,7 +1,6 @@
 import CommunityMembers from "./../models/CommunityMembers.model";
 import { Request, Response } from 'express';
 import HttpStatus from "http-status-codes";
-import { stringify } from "querystring";
 
 interface ResponseObject {
     message: string;
@@ -24,7 +23,7 @@ export const add = async (req: Request, res: Response) => {
                 user_id: userId,
                 username: username,
                 member_name: fullName,
-                memeber_pic: profileImg
+                member_pic: profileImg
             });
 
             responseObj = {

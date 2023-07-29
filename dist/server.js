@@ -8,7 +8,6 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 //loading http server and socket.io server
 const express_1 = __importDefault(require("express"));
-// import path from 'path';
 const http_1 = require("http");
 const socket_io_1 = require("socket.io");
 const body_parser_1 = __importDefault(require("body-parser"));

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.searchTag = exports.create = void 0;
+exports.getAllTags = exports.searchTag = exports.create = void 0;
 const Tags_model_1 = __importDefault(require("./../models/Tags.model"));
 const http_status_codes_1 = __importDefault(require("http-status-codes"));
 const tag = new Tags_model_1.default();
@@ -61,7 +61,7 @@ const searchTag = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             const result = yield tag.searchTag(tagName);
             console.log(result);
             responseObj = {
-                message: "sucess",
+                message: "success",
                 data: { data: result },
                 errors: []
             };
@@ -86,3 +86,23 @@ const searchTag = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.searchTag = searchTag;
+const getAllTags = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield tag.getAllTags();
+        responseObj = {
+            message: "success",
+            data: { data: result },
+            errors: []
+        };
+        res.status(http_status_codes_1.default.OK).json(responseObj);
+    }
+    catch (error) {
+        responseObj = {
+            message: "faild",
+            data: {},
+            errors: [{ errorMessage: "Some server Error" }]
+        };
+        res.status(http_status_codes_1.default.BAD_REQUEST).json(responseObj);
+    }
+});
+exports.getAllTags = getAllTags;

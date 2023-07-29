@@ -28,6 +28,7 @@ CREATE TABLE community_members (
     username VARCHAR(100) NOT NULL,
     member_name VARCHAR(200) NOt NULL,
     member_pic TEXT,
+    member_role VARCHAR(10) DEFAULT 'Member',
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ
 );

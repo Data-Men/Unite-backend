@@ -1,4 +1,27 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -8,25 +31,46 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const db_1 = __importDefault(require("../services/db"));
+const db_1 = __importStar(require("../services/db"));
 class Community {
-    create(createData) {
+    create(comunityData, memberData, tagIds) {
         return __awaiter(this, void 0, void 0, function* () {
+            const pool = yield (0, db_1.pools)();
+            const client = yield pool.connect();
             try {
-                const { name, description, privacy_status, banner_image, profile_pic, created_by } = createData;
-                console.log(createData);
-                const sql = `INSERT INTO communities (name,description,profile_pic,banner_img,privacy_status,created_by,created_at) VALUES ($1,$2,$3,$4,$5,$6,NOW()) RETURNING id,name,description,profile_pic,banner_img,privacy_status,created_by,created_at ;`;
-                const result = yield (0, db_1.default)(sql, [name, description, profile_pic, banner_image, privacy_status, created_by]);
-                console.log(result);
-                return result;
+                yield client.query('BEGIN');
+                const { name, description, privacy_status, banner_image, profile_pic, created_by } = comunityData;
+                console.log(comunityData);
+                const { user_id, username, member_name, member_pic } = memberData;
+                const communityInsert = `INSERT INTO communities (name,description,profile_pic,banner_img,privacy_status,created_by,created_at) VALUES ($1,$2,$3,$4,$5,$6,NOW()) RETURNING id,name,description,profile_pic AS profilePic,banner_img AS bannerImg,privacy_status AS privacyStatus,created_by AS createdBy;`;
+                const cData = [name, description, profile_pic, banner_image, privacy_status, created_by];
+                const communityData = yield client.query(communityInsert, cData);
+                const memberInsert = `INSERT INTO community_members (community_id,user_id,username,member_name,member_pic,member_role) VALUES ($1,$2,$3,$4,$5,$6) RETURNING id,community_id AS communityId,is_member AS isMember,user_id AS userID,username,member_name AS memberName,member_pic AS memberPic,member_role AS memberRole;`;
+                const mData = [communityData.rows[0].id, user_id, username, member_name, member_pic, "Admin"];
+                const communityMemberData = yield client.query(memberInsert, mData);
+                const tagData = tagIds.map((id) => __awaiter(this, void 0, void 0, function* () {
+                    try {
+                        const result = yield client.query("INSERT INTO community_tags(community_id,tag_id)  VALUES($1,$2) RETURNING id,community_id AS communityId", [communityData.rows[0].id, id]);
+                        return result.rows[0];
+                    }
+                    catch (error) {
+                    }
+                }));
+                yield client.query('COMMIT');
+                return {
+                    communityData: communityData.rows[0],
+                    communityMemberData: communityMemberData.rows[0],
+                    tags: tagData
+                };
             }
             catch (error) {
-                console.trace(error);
-                return false;
+                console.error(error);
+                yield client.query('ROLLBACK');
+                return {};
+            }
+            finally {
+                yield client.release();
             }
         });
     }
@@ -60,7 +104,18 @@ class Community {
     getByName(name) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const result = yield (0, db_1.default)(`SELECT * FROM communities WHERE name `);
+                const result = yield (0, db_1.default)(`SELECT * FROM communities WHERE name like $1;`, [`${name}%`]);
+                return result;
+            }
+            catch (error) {
+                return [];
+            }
+        });
+    }
+    getById(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const result = yield (0, db_1.default)(`SELECT * FROM communities WHERE id=$1;`, [id]);
                 return result;
             }
             catch (error) {

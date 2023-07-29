@@ -63,7 +63,7 @@ export const searchTag = async (req: Request, res: Response) => {
             console.log(result);
 
             responseObj = {
-                message: "sucess",
+                message: "success",
                 data: { data: result },
                 errors: []
             }
@@ -82,6 +82,25 @@ export const searchTag = async (req: Request, res: Response) => {
             message: "faild",
             data: {},
             errors: [{ errorMessage: "Invalid Data" }]
+        }
+        res.status(HttpStatus.BAD_REQUEST).json(responseObj);
+    }
+}
+
+export const getAllTags = async (req: Request, res: Response) => {
+    try {
+        const result = await tag.getAllTags();
+        responseObj = {
+            message: "success",
+            data: { data: result },
+            errors: []
+        }
+        res.status(HttpStatus.OK).json(responseObj);
+    } catch (error) {
+        responseObj = {
+            message: "faild",
+            data: {},
+            errors: [{ errorMessage: "Some server Error" }]
         }
         res.status(HttpStatus.BAD_REQUEST).json(responseObj);
     }

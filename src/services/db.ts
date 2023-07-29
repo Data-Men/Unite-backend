@@ -13,11 +13,13 @@ const pool: Pool = new Pool(config.db);
  */
 
 
-async function query(query:string,parameters?:any) {
-  const { rows, fields } = await pool.query(query,parameters);
+async function query(query: string, parameters?: any) {
+  const { rows, fields } = await pool.query(query, parameters);
   // await pool.release()
-  
+
   return rows;
 }
 
-export default query
+export const pools =  () => { return  pool };
+
+export default query;

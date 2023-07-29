@@ -27,7 +27,7 @@ const add = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 user_id: userId,
                 username: username,
                 member_name: fullName,
-                memeber_pic: profileImg
+                member_pic: profileImg
             });
             responseObj = {
                 message: "success",

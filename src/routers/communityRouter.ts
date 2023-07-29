@@ -1,31 +1,18 @@
-import express, { Express, Request, Response, NextFunction } from 'express';
+import express, { Express, Request, Response, NextFunction, response } from 'express';
 
-import { create, updateByID, deleteById } from "./../controllers/community.controller";
+import { create, getByName, getById, updateByID, deleteById } from "./../controllers/community.controller";
+import { request } from 'http';
 const router = express.Router();
 
-router.post('/', async (req: Request, res: Response) => {
-  try {
-    await create(req, res);
-  } catch (error) {
-    console.log(error);
-  }
-})
+router.post('/', create)
 
-router.put('/:id', async (req: Request, res: Response) => {
-    try {
-        await updateByID(req, res);
-    } catch (error) {
-        console.log(error);
-    }
-})
+router.get('/search/:name', getByName)
 
-router.delete('/:id', async (req: Request, res: Response) => {
-    try {
-        await deleteById(req, res);
-    } catch (error) {
-        console.log(error);
-    }
-})
+router.get('/:id', getById)
+
+router.put('/:id', updateByID)
+
+router.delete('/:id', deleteById)
 
 
 export default router

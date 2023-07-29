@@ -4,7 +4,7 @@ dotenv.config();
 
 //loading http server and socket.io server
 import express from 'express';
-// import path from 'path';
+
 import { createServer } from 'http';
 import { Server, Socket } from 'socket.io';
 import bodyParser from 'body-parser';
@@ -24,11 +24,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true,
 }));
-
-//Static file Sending
-// app.set('view engine', "ejs");
-// app.set('views', path.join(__dirname, 'views'));
-// app.use(express.static(path.join(__dirname, "public")))
 
 //Loading Chat event handlers
 import chat from './controllers/chatStart';

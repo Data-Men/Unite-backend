@@ -17,9 +17,9 @@ class CommunityMember {
     add(data) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { community_id, user_id, username, member_name, memeber_pic } = data;
-                const result = yield (0, db_1.default)(`INSERT INTO community_members(community_id,user_id,username,member_name,member_pic) VALUES
-            ($1,$2,$3,$4,$5) RETURNING id,community_id ,user_id,username,member_name,member_pic`, [community_id, user_id, username, member_name, memeber_pic]);
+                const { community_id, user_id, username, member_name, member_pic, member_role } = data;
+                const result = yield (0, db_1.default)(`INSERT INTO community_members(community_id,user_id,username,member_name,member_pic,member_role) VALUES
+            ($1,$2,$3,$4,$5,$6) RETURNING id,community_id as communityId,user_id as userId,username,member_name AS memberName,member_pic AS memberPic,member_role AS memberRole`, [community_id, user_id, username, member_name, member_pic, member_role]);
                 return result;
             }
             catch (error) {
@@ -41,7 +41,7 @@ class CommunityMember {
     getAllMembers(community_id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const result = yield (0, db_1.default)("SELECT user_id,username,member_name,member_pic FROM community_members WHERE  community_id=$1", [community_id]);
+                const result = yield (0, db_1.default)("SELECT id,user_id as userId,username,member_name AS memberName,member_pic AS memberPic,member_role AS memberRole FROM community_members WHERE  community_id=$1", [community_id]);
                 return result;
             }
             catch (error) {
@@ -52,7 +52,7 @@ class CommunityMember {
     getMemberByName(member_name) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const result = yield (0, db_1.default)("SELECT user_id,username,member_name,member_pic FROM community_members WHERE member_name=$1 ", [member_name]);
+                const result = yield (0, db_1.default)("SELECT id,user_id as userId,username,member_name AS memberName,member_pic AS memberPic,member_role AS memberRole FROM community_members WHERE member_name=$1 ", [member_name]);
                 return result;
             }
             catch (error) {

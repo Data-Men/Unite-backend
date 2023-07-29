@@ -12,6 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.pools = void 0;
 const pg_1 = require("pg");
 const config_1 = __importDefault(require("./../config"));
 // console.log(config.db);
@@ -29,4 +30,6 @@ function query(query, parameters) {
         return rows;
     });
 }
+const pools = () => { return pool; };
+exports.pools = pools;
 exports.default = query;
