@@ -69,7 +69,7 @@ class Community implements ICommunity {
                     str = str + `('${communityData.rows[0].id}',${id}),`
             });
 
-            str = str.substring(0, str.length - 1)+"RETURNING id,community_id AS communityId,tag_id as tagId";
+            str = str.substring(0, str.length - 1) + "RETURNING id,community_id AS communityId,tag_id as tagId";
 
             const tagData = await client.query(str);
 
@@ -92,25 +92,23 @@ class Community implements ICommunity {
     async updateByID(id: string, updateData: Partial<TCommunityData>): Promise<any> {
 
         try {
-            const { name, description, privacy_status, banner_image, profile_pic } = updateData
+            const { description, privacy_status, banner_image, profile_pic } = updateData
 
-            const result = await query(`UPDATE communities SET name=$1,description=$2,privacy_status=$3,banner_img=$4,profile_pic=$5 WHERE id=$6 RETURNING id,name,description,profile_pic,banner_img,privacy_status,created_by,created_at`, [name, description, privacy_status, banner_image, profile_pic, id])
-            console.log(result);
+            const result = await query(`UPDATE communities SET description=$1,privacy_status=$2,banner_img=$3,profile_pic=$4 WHERE id=$5 RETURNING id,name,description,profile_pic,banner_img,privacy_status,created_by,created_at`, [description, privacy_status, banner_image, profile_pic, id])
+
             return result
         } catch (error) {
-            console.trace(error);
-            return {}
+            throw new Error("Update Faild");
         }
     }
 
     async deleteById(id: string): Promise<boolean> {
         try {
             const result = await query(`WITH deleted AS (DELETE FROM communities WHERE id=$1 RETURNING *) SELECT count(*) FROM deleted;`, [id]);
-            // console.log(`Delete Result:${JSON.stringify(result)}`);
             return true
         } catch (error) {
-            console.trace(error);
-            return false
+            // console.trace(error);
+            throw new Error("Delete Faild");
         }
     }
 
@@ -119,7 +117,7 @@ class Community implements ICommunity {
             const result = await query(`SELECT * FROM communities WHERE name like $1;`, [`${name}%`]) as TCommunityData[] | any[]
             return result
         } catch (error) {
-            return []
+            throw error;
         }
     }
 
@@ -128,7 +126,7 @@ class Community implements ICommunity {
             const result = await query(`SELECT * FROM communities WHERE id=$1;`, [id]) as TCommunityData[] | any[]
             return result
         } catch (error) {
-            return []
+            throw error;
         }
     }
 }

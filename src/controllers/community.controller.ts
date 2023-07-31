@@ -49,7 +49,16 @@ export const create = async (req: Request, res: Response) => {
 export const updateByID = async (req: Request, res: Response) => {
     try {
         const { id } = req.params
-        const result = await community.deleteById(id);
+        const { description, bannerImg, profilePic, privacyStatus } = req.body;
+
+
+        const result = await community.updateByID(id, {
+            description,
+            banner_image: bannerImg,
+            profile_pic: profilePic,
+            privacy_status: privacyStatus
+        });
+
         responseObject = {
             message: "success",
             data: { data: result },
