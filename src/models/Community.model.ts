@@ -123,8 +123,16 @@ class Community implements ICommunity {
 
     async getById(id: string): Promise<TCommunityData[] | any[]> {
         try {
-            const result = await query(`SELECT * FROM communities WHERE id=$1;`, [id]) as TCommunityData[] | any[]
-            return result
+            const result = await query(
+            `SELECT cu.id,cu.name,cu.description,
+            'members',json_agg(json_build_object('id',cm.id,'name',cm.member_name,'isMember',cm.is_member)) AS members 
+            FROM communities cu  
+            INNER JOIN community_members cm ON cu.id=cm.community_id 
+            where cu.id=$1
+            group by cu.id,cu.name,cu.description;`,
+             [id]) as TCommunityData[] | any[]
+           
+            return result[0]
         } catch (error) {
             throw error;
         }

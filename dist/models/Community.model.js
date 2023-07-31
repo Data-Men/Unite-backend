@@ -84,14 +84,12 @@ class Community {
     updateByID(id, updateData) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { name, description, privacy_status, banner_image, profile_pic } = updateData;
-                const result = yield (0, db_1.default)(`UPDATE communities SET name=$1,description=$2,privacy_status=$3,banner_img=$4,profile_pic=$5 WHERE id=$6 RETURNING id,name,description,profile_pic,banner_img,privacy_status,created_by,created_at`, [name, description, privacy_status, banner_image, profile_pic, id]);
-                console.log(result);
+                const { description, privacy_status, banner_image, profile_pic } = updateData;
+                const result = yield (0, db_1.default)(`UPDATE communities SET description=$1,privacy_status=$2,banner_img=$3,profile_pic=$4 WHERE id=$5 RETURNING id,name,description,profile_pic,banner_img,privacy_status,created_by,created_at`, [description, privacy_status, banner_image, profile_pic, id]);
                 return result;
             }
             catch (error) {
-                console.trace(error);
-                return {};
+                throw new Error("Update Faild");
             }
         });
     }
@@ -99,12 +97,11 @@ class Community {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const result = yield (0, db_1.default)(`WITH deleted AS (DELETE FROM communities WHERE id=$1 RETURNING *) SELECT count(*) FROM deleted;`, [id]);
-                // console.log(`Delete Result:${JSON.stringify(result)}`);
                 return true;
             }
             catch (error) {
-                console.trace(error);
-                return false;
+                // console.trace(error);
+                throw new Error("Delete Faild");
             }
         });
     }
@@ -115,18 +112,23 @@ class Community {
                 return result;
             }
             catch (error) {
-                return [];
+                throw error;
             }
         });
     }
     getById(id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const result = yield (0, db_1.default)(`SELECT * FROM communities WHERE id=$1;`, [id]);
-                return result;
+                const result = yield (0, db_1.default)(`SELECT cu.id,cu.name,cu.description,
+            'members',json_agg(json_build_object('id',cm.id,'name',cm.member_name,'isMember',cm.is_member)) AS members 
+            FROM communities cu  
+            INNER JOIN community_members cm ON cu.id=cm.community_id 
+            where cu.id=$1
+            group by cu.id,cu.name,cu.description;`, [id]);
+                return result[0];
             }
             catch (error) {
-                return [];
+                throw error;
             }
         });
     }

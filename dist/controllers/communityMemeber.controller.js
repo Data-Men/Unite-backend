@@ -19,7 +19,7 @@ const communityMembers = new CommunityMembers_model_1.default();
 let responseObj;
 const add = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log(req.body);
-    const { communityId, userId, username, fullName, profileImg } = req.body;
+    const { communityId, userId, username, fullName, profileImg, memberRole } = req.body;
     if (communityId != null || userId != null || username != null || fullName != null) {
         try {
             const result = yield communityMembers.add({
@@ -27,7 +27,8 @@ const add = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 user_id: userId,
                 username: username,
                 member_name: fullName,
-                member_pic: profileImg
+                member_pic: profileImg,
+                member_role: memberRole
             });
             responseObj = {
                 message: "success",
@@ -61,15 +62,15 @@ const remove = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (id !== "") {
         try {
             const result = yield communityMembers.remove(id);
-            console.log(result);
             responseObj = {
                 message: "sucess",
-                data: {},
+                data: result,
                 errors: []
             };
             res.status(http_status_codes_1.default.OK).json(responseObj);
         }
         catch (error) {
+            console.log(error);
             responseObj = {
                 message: "faild",
                 data: {},

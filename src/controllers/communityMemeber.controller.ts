@@ -13,7 +13,7 @@ let responseObj: ResponseObject;
 
 export const add = async (req: Request, res: Response) => {
     console.log(req.body);
-    const { communityId, userId, username, fullName, profileImg } = req.body
+    const { communityId, userId, username, fullName, profileImg, memberRole } = req.body
 
     if (communityId != null || userId != null || username != null || fullName != null) {
         try {
@@ -23,7 +23,8 @@ export const add = async (req: Request, res: Response) => {
                 user_id: userId,
                 username: username,
                 member_name: fullName,
-                member_pic: profileImg
+                member_pic: profileImg,
+                member_role: memberRole
             });
 
             responseObj = {
@@ -60,15 +61,16 @@ export const remove = async (req: Request, res: Response) => {
 
         try {
             const result = await communityMembers.remove(id);
-            console.log(result);
 
             responseObj = {
                 message: "sucess",
-                data: {},
+                data: result,
                 errors: []
             }
             res.status(HttpStatus.OK).json(responseObj);
         } catch (error) {
+            console.log(error);
+            
             responseObj = {
                 message: "faild",
                 data: {},

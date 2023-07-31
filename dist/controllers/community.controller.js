@@ -55,7 +55,13 @@ exports.create = create;
 const updateByID = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;
-        const result = yield community.deleteById(id);
+        const { description, bannerImg, profilePic, privacyStatus } = req.body;
+        const result = yield community.updateByID(id, {
+            description,
+            banner_image: bannerImg,
+            profile_pic: profilePic,
+            privacy_status: privacyStatus
+        });
         responseObject = {
             message: "success",
             data: { data: result },

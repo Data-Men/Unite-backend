@@ -26,34 +26,34 @@ class CommunityMember implements ICommunityMember {
             ($1,$2,$3,$4,$5,$6) RETURNING id,community_id as communityId,user_id as userId,username,member_name AS memberName,member_pic AS memberPic,member_role AS memberRole`, [community_id, user_id, username, member_name, member_pic, member_role])
             return result
         } catch (error) {
-            console.log(error);
+            throw error
         }
     }
 
-    async remove(id: string): Promise<boolean> {
+    async remove(id: string): Promise<any> {
         try {
-            const result = await query("UPDATE community_members SET  is_member='f',updated_at=NOW() WHERE id=$1 RETURNING is,username,is_member", [id]);
-            return true
+            const result = await query(`UPDATE community_members SET  is_member='f',updated_at=NOW() WHERE id=$1 RETURNING id,username,is_member;`, [id]);
+            return result
         } catch (error) {
-            return false
+          throw error
         }
     }
 
     async getAllMembers(community_id: string): Promise<any[]> {
         try {
-            const result = await query("SELECT id,user_id as userId,username,member_name AS memberName,member_pic AS memberPic,member_role AS memberRole FROM community_members WHERE  community_id=$1", [community_id]);
+            const result = await query("SELECT id,user_id as userId,username,member_name AS memberName,member_pic AS memberPic,member_role AS memberRole,is_member AS ismember FROM community_members WHERE  community_id=$1", [community_id]);
             return result
         } catch (error) {
-            return []
+            throw error
         }
     }
 
     async getMemberByName(member_name: String): Promise<any[]> {
         try {
-            const result = await query("SELECT id,user_id as userId,username,member_name AS memberName,member_pic AS memberPic,member_role AS memberRole FROM community_members WHERE member_name=$1 ", [member_name])
+            const result = await query("SELECT id,user_id as userId,username,member_name AS memberName,member_pic AS memberPic,member_role AS memberRole FROM community_members WHERE is_member='t' AND member_name=$1 ", [member_name])
             return result
         } catch (error) {
-            return []
+            throw error
         }
     }
 

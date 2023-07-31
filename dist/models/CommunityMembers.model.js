@@ -23,40 +23,40 @@ class CommunityMember {
                 return result;
             }
             catch (error) {
-                console.log(error);
+                throw error;
             }
         });
     }
     remove(id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const result = yield (0, db_1.default)("UPDATE community_members SET  is_member='f',updated_at=NOW() WHERE id=$1 RETURNING is,username,is_member", [id]);
-                return true;
+                const result = yield (0, db_1.default)(`UPDATE community_members SET  is_member='f',updated_at=NOW() WHERE id=$1 RETURNING id,username,is_member;`, [id]);
+                return result;
             }
             catch (error) {
-                return false;
+                throw error;
             }
         });
     }
     getAllMembers(community_id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const result = yield (0, db_1.default)("SELECT id,user_id as userId,username,member_name AS memberName,member_pic AS memberPic,member_role AS memberRole FROM community_members WHERE  community_id=$1", [community_id]);
+                const result = yield (0, db_1.default)("SELECT id,user_id as userId,username,member_name AS memberName,member_pic AS memberPic,member_role AS memberRole,is_member AS ismember FROM community_members WHERE  community_id=$1", [community_id]);
                 return result;
             }
             catch (error) {
-                return [];
+                throw error;
             }
         });
     }
     getMemberByName(member_name) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const result = yield (0, db_1.default)("SELECT id,user_id as userId,username,member_name AS memberName,member_pic AS memberPic,member_role AS memberRole FROM community_members WHERE member_name=$1 ", [member_name]);
+                const result = yield (0, db_1.default)("SELECT id,user_id as userId,username,member_name AS memberName,member_pic AS memberPic,member_role AS memberRole FROM community_members WHERE is_member='t' AND member_name=$1 ", [member_name]);
                 return result;
             }
             catch (error) {
-                return [];
+                throw error;
             }
         });
     }
