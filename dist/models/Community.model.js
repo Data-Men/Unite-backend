@@ -119,12 +119,19 @@ class Community {
     getById(id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const result = yield (0, db_1.default)(`SELECT cu.id,cu.name,cu.description,
-            'members',json_agg(json_build_object('id',cm.id,'name',cm.member_name,'isMember',cm.is_member)) AS members 
+                const result = yield (0, db_1.default)(`select cu.*, (select json_agg(json_build_object('id',cm.id,'userId',cm.user_id,'username',cm.username,'memberName',
+            cm.member_name,'memberPic',cm.member_pic,'memberRole',cm.member_role)) 
+            from community_members cm 
+            where cm.community_id=cu.id
+                     and cm.is_member='t') as members,
+           (select json_agg(json_build_object('id',cp.id,'caption',cp.caption,'media',cp.media,'created_at',cp.created_at
+                                             ,'memberId',cm.id,'userId',cm.user_id,'username',cm.username,'memberName',cm.member_name
+                                              ,'memberPic',cm.member_pic,'memberRole',cm.member_role)) 
+            from community_posts cp
+            LEFT JOIN community_members cm ON cm.id=cp.member_id
+            where cp.community_id=cu.id ) as posts 
             FROM communities cu  
-            INNER JOIN community_members cm ON cu.id=cm.community_id 
-            where cu.id=$1
-            group by cu.id,cu.name,cu.description;`, [id]);
+            where cu.id=$1`, [id]);
                 return result[0];
             }
             catch (error) {

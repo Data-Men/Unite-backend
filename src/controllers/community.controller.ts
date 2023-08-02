@@ -97,7 +97,7 @@ export const getByName = async (req: Request, res: Response) => {
         res.status(501).json({
             message: "faild",
             data: {},
-            error: [{ errorMessage: error }]
+            error: [{ errorMessage: "some server error" }]
         })
     }
 }
@@ -123,7 +123,7 @@ export const getById = async (req: Request, res: Response) => {
         res.status(501).json({
             message: "faild",
             data: {},
-            error: [{ errorMessage: error }]
+            error: [{ errorMessage: "some server error" }]
         })
     }
 }
@@ -141,7 +141,7 @@ export const deleteById = async (req: Request, res: Response) => {
         res.status(501).json({
             message: "faild",
             data: {},
-            error: [{ errorMessage: error }]
+            error: [{ errorMessage: "some server error" }]
         })
         console.trace(error)
     }

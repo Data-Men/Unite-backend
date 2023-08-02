@@ -102,7 +102,7 @@ const getByName = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.status(501).json({
             message: "faild",
             data: {},
-            error: [{ errorMessage: error }]
+            error: [{ errorMessage: "some server error" }]
         });
     }
 });
@@ -130,7 +130,7 @@ const getById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.status(501).json({
             message: "faild",
             data: {},
-            error: [{ errorMessage: error }]
+            error: [{ errorMessage: "some server error" }]
         });
     }
 });
@@ -149,7 +149,7 @@ const deleteById = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.status(501).json({
             message: "faild",
             data: {},
-            error: [{ errorMessage: error }]
+            error: [{ errorMessage: "some server error" }]
         });
         console.trace(error);
     }

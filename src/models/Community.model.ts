@@ -124,12 +124,19 @@ class Community implements ICommunity {
     async getById(id: string): Promise<TCommunityData[] | any[]> {
         try {
             const result = await query(
-            `SELECT cu.id,cu.name,cu.description,
-            'members',json_agg(json_build_object('id',cm.id,'name',cm.member_name,'isMember',cm.is_member)) AS members 
+            `select cu.*, (select json_agg(json_build_object('id',cm.id,'userId',cm.user_id,'username',cm.username,'memberName',
+            cm.member_name,'memberPic',cm.member_pic,'memberRole',cm.member_role)) 
+            from community_members cm 
+            where cm.community_id=cu.id
+                     and cm.is_member='t') as members,
+           (select json_agg(json_build_object('id',cp.id,'caption',cp.caption,'media',cp.media,'created_at',cp.created_at
+                                             ,'memberId',cm.id,'userId',cm.user_id,'username',cm.username,'memberName',cm.member_name
+                                              ,'memberPic',cm.member_pic,'memberRole',cm.member_role)) 
+            from community_posts cp
+            LEFT JOIN community_members cm ON cm.id=cp.member_id
+            where cp.community_id=cu.id ) as posts 
             FROM communities cu  
-            INNER JOIN community_members cm ON cu.id=cm.community_id 
-            where cu.id=$1
-            group by cu.id,cu.name,cu.description;`,
+            where cu.id=$1`,
              [id]) as TCommunityData[] | any[]
            
             return result[0]
