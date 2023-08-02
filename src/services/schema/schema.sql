@@ -33,10 +33,17 @@ CREATE TABLE community_members (
     updated_at TIMESTAMPTZ
 );
 CREATE TABLE community_posts(
-    id UUID DEFAULT uuid_generate_v4(),
-    image VARCHAR(200),
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     caption TEXT,
-    tags VARCHAR(50) [],
+    media JSON[],
     community_id UUID REFERENCES communities(id) NOT NULL,
-    created_at TIMESTAMPTZ
+    member_id UUID REFERENCES community_members(id) NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW()
 );
+CREATE TABLE post_tags(
+    id SERIAL PRIMARY KEY,
+    post_id UUID REFERENCES community_posts(id) NOT NULL,
+    tag_id SERIAL REFERENCES tags(id) NOT NULL
+);
+
+

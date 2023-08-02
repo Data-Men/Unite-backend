@@ -16,9 +16,10 @@ const httpServer = createServer(app);
 const io = new Server(httpServer);
 
 //loading routes
+import tagRouter from "./routers/tagsRouter"
 import communityRouter from "./routers/communityRouter";
 import communityMemberRouter from "./routers/communityMemeberRouter"
-import tagRouter from "./routers/tagsRouter"
+import communityPostRouter from "./routers/communityPostRouter"
 //parsing request
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -30,9 +31,9 @@ import chat from './controllers/chatStart';
 
 //Routing
 app.use('/community', communityRouter);
-app.use('/community/members',communityMemberRouter);
-app.use('/tag',tagRouter);
-
+app.use('/community/members', communityMemberRouter);
+app.use('/tag', tagRouter);
+app.use('/communities/posts',communityPostRouter);
 //Event Listening
 // const onConnection = (Socket: Socket) => {
 //     console.log("Connect to the websocket");

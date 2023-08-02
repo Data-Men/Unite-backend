@@ -17,9 +17,10 @@ const httpServer = (0, http_1.createServer)(app);
 //Connecting httpserver and Websocket
 const io = new socket_io_1.Server(httpServer);
 //loading routes
+const tagsRouter_1 = __importDefault(require("./routers/tagsRouter"));
 const communityRouter_1 = __importDefault(require("./routers/communityRouter"));
 const communityMemeberRouter_1 = __importDefault(require("./routers/communityMemeberRouter"));
-const tagsRouter_1 = __importDefault(require("./routers/tagsRouter"));
+const communityPostRouter_1 = __importDefault(require("./routers/communityPostRouter"));
 //parsing request
 app.use(body_parser_1.default.json());
 app.use(body_parser_1.default.urlencoded({
@@ -29,6 +30,7 @@ app.use(body_parser_1.default.urlencoded({
 app.use('/community', communityRouter_1.default);
 app.use('/community/members', communityMemeberRouter_1.default);
 app.use('/tag', tagsRouter_1.default);
+app.use('/communities/posts', communityPostRouter_1.default);
 //Event Listening
 // const onConnection = (Socket: Socket) => {
 //     console.log("Connect to the websocket");
