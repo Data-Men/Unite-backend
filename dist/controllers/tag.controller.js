@@ -59,7 +59,6 @@ const searchTag = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (tagName !== "") {
         try {
             const result = yield tag.searchTag(tagName);
-            console.log(result);
             responseObj = {
                 message: "success",
                 data: { data: result },

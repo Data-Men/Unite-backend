@@ -14,7 +14,7 @@ exports.dbConfig = {
     listPerPage: env.LIST_PER_PAGE,
 };
 exports.corsOptions = {
-    origin: ["https://unite-nine.vercel.app", "localhost:3000"],
+    origin: ["https://unite-nine.vercel.app", "http://localhost:3000"],
     methods: ['GET', 'PUT', 'POST', 'DELETE'],
     credentials: true,
     optionsSuccessStatus: 200,

@@ -60,7 +60,6 @@ export const searchTag = async (req: Request, res: Response) => {
 
         try {
             const result = await tag.searchTag(tagName);
-            console.log(result);
 
             responseObj = {
                 message: "success",

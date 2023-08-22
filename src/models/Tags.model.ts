@@ -1,3 +1,4 @@
+import { log } from "console";
 import query from "../services/db";
 
 interface ITags {
@@ -40,8 +41,7 @@ class Tag implements ITags {
 
     async getAllTags(): Promise<TTag[]> {
         try {
-
-            const result = await query("SELECT id,name,category FROM tags;")
+            const result = await query('SELECT id,name,tag_color as "color" FROM tags;')
             return result;
         } catch (error) {
             return []
@@ -50,16 +50,18 @@ class Tag implements ITags {
 
     async searchTag(tagName: String): Promise<TTag[]> {
         try {
-            const result = await query("SELECT id,name,category FROM tags where name like $1", [`${tagName}%`])
+            const result = await query("SELECT id,name,tag_color as color FROM tags where name ILIKE $1", [`${tagName}%`])  
+                console.log(result);
             return result
         } catch (error) {
+            console.log(error);            
             return []
         }
     }
 
     async getTagById(id: number): Promise<any[]> {
         try {
-            const result = await query("SELECT id,name,category FROM tags where name=$1", [id])
+            const result = await query('SELECT id,name,tag_color as "color" FROM tags where name=$1', [id])
             return result
         } catch (error) {
             console.log

@@ -45,5 +45,9 @@ CREATE TABLE post_tags(
     post_id UUID REFERENCES community_posts(id) NOT NULL,
     tag_id SERIAL REFERENCES tags(id) NOT NULL
 );
-
+--category removed color added
+ALTER TABLE tags   
+DROP COLUMN category
+ALTER TABLE tags   
+Add COLUMN tag_color VARCHAR(7) DEFAULT '#3498db';
 
