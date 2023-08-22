@@ -1,9 +1,7 @@
 import { Pool } from 'pg';
-import config from './../config';
+import {dbConfig} from './../config';
 
-// console.log(config.db);
-
-const pool: Pool = new Pool(config.db);
+const pool: Pool = new Pool(dbConfig.db);
 
 /**
  * Query the database using the pool

@@ -1,6 +1,6 @@
 const env = process.env;
 
-const config = {
+export const dbConfig = {
     db: {
         host: env.DB_HOST,
         port: Number(env.DB_PORT),
@@ -12,4 +12,10 @@ const config = {
     listPerPage: env.LIST_PER_PAGE,
 };
 
-export default config;
+export const corsOptions={
+    origin: ["https://unite-nine.vercel.app","http://localhost:3000"],
+    methods: ['GET', 'PUT', 'POST', 'DELETE'],
+    credentials: true,
+    optionsSuccessStatus: 200,
+    preflightContinue: false,
+}

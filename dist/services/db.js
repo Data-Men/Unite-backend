@@ -8,15 +8,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.pools = void 0;
 const pg_1 = require("pg");
-const config_1 = __importDefault(require("./../config"));
-// console.log(config.db);
-const pool = new pg_1.Pool(config_1.default.db);
+const config_1 = require("./../config");
+const pool = new pg_1.Pool(config_1.dbConfig.db);
 /**
  * Query the database using the pool
  * @param {*} query

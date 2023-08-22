@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.corsOptions = exports.dbConfig = void 0;
 const env = process.env;
-const config = {
+exports.dbConfig = {
     db: {
         host: env.DB_HOST,
         port: Number(env.DB_PORT),
@@ -12,4 +13,10 @@ const config = {
     },
     listPerPage: env.LIST_PER_PAGE,
 };
-exports.default = config;
+exports.corsOptions = {
+    origin: ["https://unite-nine.vercel.app", "localhost:3000"],
+    methods: ['GET', 'PUT', 'POST', 'DELETE'],
+    credentials: true,
+    optionsSuccessStatus: 200,
+    preflightContinue: false,
+};
