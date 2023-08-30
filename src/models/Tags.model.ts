@@ -7,6 +7,7 @@ interface ITags {
     getAllTags(): Promise<TTag[]>,
     searchTag(tagName: String): Promise<TTag[]>,
     getTagById(id: number): Promise<any[]>,
+    getAllExcept(ids: number[]): Promise<any[]>,
 }
 
 type TTag = {
@@ -25,7 +26,7 @@ class Tag implements ITags {
         } catch (error) {
             console.log("Error While Creating Tag");
             console.log(error);
-            
+
             return []
         }
     }
@@ -44,18 +45,17 @@ class Tag implements ITags {
             const result = await query('SELECT id,name,tag_color as "color" FROM tags;')
             return result;
         } catch (error) {
-            return []
+            throw new Error("some error");
         }
     }
 
     async searchTag(tagName: String): Promise<TTag[]> {
         try {
-            const result = await query("SELECT id,name,tag_color as color FROM tags where name ILIKE $1", [`${tagName}%`])  
-                console.log(result);
+            const result = await query("SELECT id,name,tag_color as color FROM tags where name ILIKE $1", [`${tagName}%`])
+            console.log(result);
             return result
         } catch (error) {
-            console.log(error);            
-            return []
+            throw new Error("some error");
         }
     }
 
@@ -64,8 +64,17 @@ class Tag implements ITags {
             const result = await query('SELECT id,name,tag_color as "color" FROM tags where name=$1', [id])
             return result
         } catch (error) {
-            console.log
-            return []
+            throw new Error("some error");
+        }
+    }
+    async getAllExcept(ids: number[]): Promise<any[]> {
+        
+        try {
+            const result = await query(`SELECT id,name,tag_color as "color" FROM tags where id not in (${ids})`)
+            return result
+        } catch (error) {
+            console.log(error);
+            throw new Error("some error");
         }
     }
 }

@@ -7,6 +7,7 @@ const express_1 = __importDefault(require("express"));
 const tag_controller_1 = require("./../controllers/tag.controller");
 const router = express_1.default.Router();
 router.post('/', tag_controller_1.create);
+router.get('/exclude', tag_controller_1.getAllExcept);
 router.get('/', tag_controller_1.getAllTags);
 router.get('/:tagName', tag_controller_1.searchTag);
 exports.default = router;

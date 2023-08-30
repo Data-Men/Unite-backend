@@ -45,7 +45,7 @@ class Tag {
                 return result;
             }
             catch (error) {
-                return [];
+                throw new Error("some error");
             }
         });
     }
@@ -57,8 +57,7 @@ class Tag {
                 return result;
             }
             catch (error) {
-                console.log(error);
-                return [];
+                throw new Error("some error");
             }
         });
     }
@@ -69,8 +68,19 @@ class Tag {
                 return result;
             }
             catch (error) {
-                console.log;
-                return [];
+                throw new Error("some error");
+            }
+        });
+    }
+    getAllExcept(ids) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const result = yield (0, db_1.default)(`SELECT id,name,tag_color as "color" FROM tags where id not in (${ids})`);
+                return result;
+            }
+            catch (error) {
+                console.log(error);
+                throw new Error("some error");
             }
         });
     }

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllTags = exports.searchTag = exports.create = void 0;
+exports.getAllExcept = exports.getAllTags = exports.searchTag = exports.create = void 0;
 const Tags_model_1 = __importDefault(require("./../models/Tags.model"));
 const http_status_codes_1 = __importDefault(require("http-status-codes"));
 const tag = new Tags_model_1.default();
@@ -105,3 +105,29 @@ const getAllTags = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.getAllTags = getAllTags;
+const getAllExcept = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { ids } = req.body;
+    try {
+        if (ids.every((id) => typeof id === 'number')) {
+            const result = yield tag.getAllExcept(ids);
+            responseObj = {
+                message: "success",
+                data: { data: result },
+                errors: []
+            };
+            res.status(http_status_codes_1.default.OK).json(responseObj);
+        }
+        else {
+            throw new Error("Type error");
+        }
+    }
+    catch (error) {
+        responseObj = {
+            message: "faild",
+            data: {},
+            errors: [{ errorMessage: "Some server Error" }]
+        };
+        res.status(http_status_codes_1.default.BAD_REQUEST).json(responseObj);
+    }
+});
+exports.getAllExcept = getAllExcept;

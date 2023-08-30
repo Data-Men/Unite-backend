@@ -104,3 +104,29 @@ export const getAllTags = async (req: Request, res: Response) => {
         res.status(HttpStatus.BAD_REQUEST).json(responseObj);
     }
 }
+
+export const getAllExcept = async (req: Request, res: Response) => {
+    const { ids } = req.body as { ids: number[] }
+    try {
+        if (ids.every((id) => typeof id === 'number')) {
+            const result = await tag.getAllExcept(ids);
+            responseObj = {
+                message: "success",
+                data: { data: result },
+                errors: []
+            }
+            res.status(HttpStatus.OK).json(responseObj);
+        }else{
+            throw new Error("Type error");
+        }
+       
+    } catch (error) {
+        responseObj = {
+            message: "faild",
+            data: {},
+            errors: [{ errorMessage: "Some server Error" }]
+        }
+        res.status(HttpStatus.BAD_REQUEST).json(responseObj);
+    }
+}
+
