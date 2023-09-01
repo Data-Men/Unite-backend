@@ -42,7 +42,7 @@ class Tag implements ITags {
 
     async getAllTags(): Promise<TTag[]> {
         try {
-            const result = await query('SELECT id,name,tag_color as "color" FROM tags;')
+            const result = await query('SELECT id,name,tag_color as "color" FROM tags ORDER BY id;')
             return result;
         } catch (error) {
             throw new Error("some error");

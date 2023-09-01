@@ -41,7 +41,7 @@ class Tag {
     getAllTags() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const result = yield (0, db_1.default)('SELECT id,name,tag_color as "color" FROM tags;');
+                const result = yield (0, db_1.default)('SELECT id,name,tag_color as "color" FROM tags ORDER BY id;');
                 return result;
             }
             catch (error) {
