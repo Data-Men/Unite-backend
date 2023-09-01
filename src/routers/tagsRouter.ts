@@ -5,10 +5,11 @@ const router = express.Router();
 
 router.post('/', create)
 
-router.get('/exclude', getAllExcept)
-
 router.get('/', getAllTags)
 
+router.get('/exclude', getAllExcept)
+
 router.get('/:tagName', searchTag)
+
 
 export default router

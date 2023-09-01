@@ -106,10 +106,11 @@ const getAllTags = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 });
 exports.getAllTags = getAllTags;
 const getAllExcept = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { ids } = req.body;
+    const { ids } = req.query;
     try {
-        if (ids.every((id) => typeof id === 'number')) {
-            const result = yield tag.getAllExcept(ids);
+        const parsedIds = JSON.parse(ids);
+        if (parsedIds.every((id) => typeof id === 'number')) {
+            const result = yield tag.getAllExcept(parsedIds);
             responseObj = {
                 message: "success",
                 data: { data: result },

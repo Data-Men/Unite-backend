@@ -52,7 +52,7 @@ class Tag {
     searchTag(tagName) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const result = yield (0, db_1.default)("SELECT id,name,tag_color as color FROM tags where name ILIKE $1", [`${tagName}%`]);
+                const result = yield (0, db_1.default)("SELECT id,name,tag_color as color FROM tags where name ILIKE $1 ORDER BY id ", [`${tagName}%`]);
                 console.log(result);
                 return result;
             }
@@ -64,7 +64,7 @@ class Tag {
     getTagById(id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const result = yield (0, db_1.default)('SELECT id,name,tag_color as "color" FROM tags where name=$1', [id]);
+                const result = yield (0, db_1.default)('SELECT id,name,tag_color as "color" FROM tags where name=$1 ', [id]);
                 return result;
             }
             catch (error) {
@@ -75,7 +75,7 @@ class Tag {
     getAllExcept(ids) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const result = yield (0, db_1.default)(`SELECT id,name,tag_color as "color" FROM tags where id not in (${ids})`);
+                const result = yield (0, db_1.default)(`SELECT id,name,tag_color as "color" FROM tags where id not in (${ids}) ORDER BY id`);
                 return result;
             }
             catch (error) {

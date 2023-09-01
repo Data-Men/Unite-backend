@@ -51,7 +51,7 @@ class Tag implements ITags {
 
     async searchTag(tagName: String): Promise<TTag[]> {
         try {
-            const result = await query("SELECT id,name,tag_color as color FROM tags where name ILIKE $1", [`${tagName}%`])
+            const result = await query("SELECT id,name,tag_color as color FROM tags where name ILIKE $1 ORDER BY id ", [`${tagName}%`])
             console.log(result);
             return result
         } catch (error) {
@@ -61,7 +61,7 @@ class Tag implements ITags {
 
     async getTagById(id: number): Promise<any[]> {
         try {
-            const result = await query('SELECT id,name,tag_color as "color" FROM tags where name=$1', [id])
+            const result = await query('SELECT id,name,tag_color as "color" FROM tags where name=$1 ', [id])
             return result
         } catch (error) {
             throw new Error("some error");
@@ -70,7 +70,7 @@ class Tag implements ITags {
     async getAllExcept(ids: number[]): Promise<any[]> {
         
         try {
-            const result = await query(`SELECT id,name,tag_color as "color" FROM tags where id not in (${ids})`)
+            const result = await query(`SELECT id,name,tag_color as "color" FROM tags where id not in (${ids}) ORDER BY id`)
             return result
         } catch (error) {
             console.log(error);

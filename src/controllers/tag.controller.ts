@@ -106,20 +106,22 @@ export const getAllTags = async (req: Request, res: Response) => {
 }
 
 export const getAllExcept = async (req: Request, res: Response) => {
-    const { ids } = req.body as { ids: number[] }
+    const { ids } = req.query as { ids: string }
     try {
-        if (ids.every((id) => typeof id === 'number')) {
-            const result = await tag.getAllExcept(ids);
+        const parsedIds = JSON.parse(ids) as number[];
+
+        if (parsedIds.every((id) => typeof id === 'number')) {
+            const result = await tag.getAllExcept(parsedIds);
             responseObj = {
                 message: "success",
                 data: { data: result },
                 errors: []
             }
             res.status(HttpStatus.OK).json(responseObj);
-        }else{
+        } else {
             throw new Error("Type error");
         }
-       
+
     } catch (error) {
         responseObj = {
             message: "faild",
