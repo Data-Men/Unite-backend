@@ -8,7 +8,6 @@ The backend of the Unite community chat application, developed using TypeScript 
 * [Tech Stack](#tech-stack)
 * [Getting Started](#getting-started)
 * [Project Structure](#project-structure)
-* [API Endpoints](#api-endpoints)
 * [Contributing](#contributing)
 * [License](#license)
 
